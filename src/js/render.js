@@ -8,7 +8,7 @@ const baseBorderColor = "#ecf0f1";
 const errorBorderColor = "#e74c3c";
 const lightBaseBorderColor = "#6db9d5";
 
-const students = [];
+let students = [];
 
 const coursesContainer = document.getElementById("coursesContainer");
 const newCourseContainer = document.getElementById("newCourseContainer");
@@ -133,6 +133,7 @@ addStudentBtn.addEventListener("click", (event) => {
 
   studentsContainer.prepend(item);
   studentNameInputField.value = "";
+  studentNameInputField.focus();
 });
 
 studentNameInputField.addEventListener("keypress", (event) => {
@@ -154,10 +155,14 @@ cancelBtn.addEventListener("click", (event) => {
     newCourseContainer.classList.replace("block", "none");
 
     students = [];
-    courseName = "";
+    for (let node of studentsContainer.children) {
+      node.remove();
+    }
   } else {
     cancelBtn.classList.add("warningBorder");
   }
+
+  
 });
 
 //todo === submit course creation ===
@@ -169,6 +174,7 @@ submitBtn.addEventListener("click", (event) => {
   if (data["courses"][courseName]) {
     createErrorMessage("Ein Kurs mit dem Namen existiert bereits!");
     courseNameInputField.value = "";
+    courseNameInputField.focus();
     return;
   }
 
@@ -186,21 +192,9 @@ submitBtn.addEventListener("click", (event) => {
   coursesContainer.classList.replace("none", "flex");
   newCourseContainer.classList.replace("block", "none");
 
-  // create course (button)
-  // const paragraph = document.createElement("p");
-  // paragraph.classList.add("courseName");
-  // paragraph.innerText = courseName;
-
-  // const button = document.createElement("button");
-  // button.classList.add("courseBtn");
-
-  // const div = document.createElement("div");
-  // div.classList.add("course");
-  // div.value = courseName;
-
-  // button.appendChild(paragraph);
-  // div.appendChild(button);
-  // coursesContainer.prepend(div);
+  for (let node of studentsContainer.children) {
+    node.remove();
+  }
 
   // save course data in json file
   const weekday = [
