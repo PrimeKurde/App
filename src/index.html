@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="./css/coursesContainer.css" />
+  <link rel="stylesheet" href="./css/newCoursesContainer.css" />
+  <script src="./js/render.js" defer></script>
+</head>
+
+<body>
+  <div id="coursesContainer" class="flex">
+    <!-- new divs -->
+    <div id="newCourse" class="course">
+      <button id="createCourseBtn">
+        <p>Neuen Kurs anlegen</p>
+        <span>&plus;</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="newCourseContainer" class="none">
+    <input type="text" class="inputField" id="courseNameInputField" placeholder="Name des Kurses" />
+    <input type="text" class="inputField" id="studentNameInputField" placeholder="Name des Schülers" />
+    <button id="addStudentBtn" class="btn">Hinzufügen</button>
+    <div id="studentsContainer">
+      <!-- new items -->
+    </div>
+    <div id="errorMessagesContainer">
+      <!-- error Messages -->
+    </div>
+    <button id="cancelBtn" class="btn">Abbrechen</button>
+    <button id="submitBtn" class="btn">Fertig</button>
+  </div>
+</body>
+
+</html>
