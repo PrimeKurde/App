@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="./css/styles.css" />
   <link rel="stylesheet" href="./css/coursesContainer.css" />
   <link rel="stylesheet" href="./css/newCoursesContainer.css" />
+  <link rel="stylesheet" href="./css/activeCourseContainer.css">
   <script src="./js/render.js" defer></script>
 </head>
 
@@ -31,9 +32,20 @@
     <div id="errorMessagesContainer">
       <!-- error Messages -->
     </div>
-    <button id="cancelBtn" class="btn">Abbrechen</button>
-    <button id="submitBtn" class="btn">Fertig</button>
+    <button id="cancelBtn" class="btn baseBorder">Abbrechen</button>
+    <button id="submitBtn" class="btn baseBorder">Fertig</button>
+  </div>
+  <div id="activeCourseContainer" class="none">
+    <!-- active Course is here -->
+    <h1></h1>
+    <button id="closeBtn">&#x2190;</button>
+    <button id="deleteCourseBtn">&#x2716;</button>
+    <div id="studentsList">
+      <!-- students -->
+    </div>
   </div>
 </body>
 
 </html>
+
+<!-- Made by Yasin Aydin -->

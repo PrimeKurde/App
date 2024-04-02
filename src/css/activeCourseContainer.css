@@ -1,0 +1,109 @@
+#activeCourseContainer {
+  width: 100%;
+  height: 100%;
+  background-color: #60a3bc;
+  display: none;
+  position: relative;
+  overflow-y: scroll;
+  padding-bottom: 50px;
+}
+
+#activeCourseContainer::-webkit-scrollbar {
+  display: none;
+}
+
+#activeCourseContainer {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#activeCourseContainer h1 {
+  margin: 0;
+  text-align: center;
+  color: #dfe6e9;
+  margin: 10px 0 40px 0;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #dfe6e9;
+}
+
+button#closeBtn {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  font-size: 2rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button#deleteCourseBtn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 2rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#studentsList {
+  width: 90%;
+  margin-left: 5%;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 50px;
+  gap: 10px;
+}
+
+
+#studentsList div.student {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #6db9d5;
+  padding-bottom: 10px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+div.student button {
+  width: 70px;
+  height: 50px;
+  font-size: 2rem;
+  padding: 0;
+  border: 2px solid black;
+  border-radius: 5px;
+  position: relative;
+}
+
+div.student button:hover {
+  top: -5px;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+button.goodPoint {
+  background-color: #2ecc71;
+}
+
+button.badPoint {
+  position: relative;
+  right: -5px;
+  background-color: #e74c3c;
+}
+
+div.student p {
+  margin: 0;
+  position: relative;
+  top: 10px;
+  right: 8px;
+  text-wrap: wrap;
+}
+
+p span.points {
+  font-size: 1.6rem;
+  color: #bdc3c7;
+  margin-right: 10px;
+}
+
+/* Made by Yasin Aydin */

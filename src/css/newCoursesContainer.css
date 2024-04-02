@@ -76,6 +76,7 @@ div#studentsContainer {
   padding-left: 30px;
   position: relative;
   font-size: 1.75rem;
+  text-wrap: nowrap;
 }
 
 .item .deleteStudentBtn {
@@ -114,3 +115,5 @@ button#submitBtn {
   font-weight: bold;
   text-align: center;
 }
+
+/* Made by Yasin Aydin */
