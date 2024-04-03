@@ -35,6 +35,11 @@ const writeJsonData = (data) => {
 	fs.writeFileSync(path.join(__dirname, "data", "courses.json"), JSON.stringify(data));
 };
 
+const resetStudentsList = () => {
+	students = [];
+	studentsLowered = [];
+};
+
 const createErrorMessage = (err) => {
 	const p = document.createElement("p");
 	p.innerText = err;
@@ -88,40 +93,45 @@ const openCourseOverlay = (courseName) => {
 		studentsListNode.remove();
 		activeCourseContainer.appendChild(newContainer);
 
+    clickCounter = 0;
+    deleteCourseBtn.style.color = "#000";
+
 		coursesContainer.classList.replace("none", "flex");
 		activeCourseContainer.classList.replace("block", "none");
-  });
+	});
 
-  let clickCounter = 0;
-  const deleteCourseBtn = document.getElementById("deleteCourseBtn");
-  deleteCourseBtn.addEventListener("click", (event) => {
-    clickCounter++;
-    if (clickCounter <= 1) {
-      deleteCourseBtn.style.color = "#f1c40f";
-      return;
-    } else if (clickCounter === 2) {
-      deleteCourseBtn.style.color = "#e67e22";
-      return;
-    } else if (clickCounter === 3) {
-      deleteCourseBtn.style.color = "#e74c3c";
-      return;
-    }
+	let clickCounter = 0;
+	const deleteCourseBtn = document.getElementById("deleteCourseBtn");
+	deleteCourseBtn.addEventListener("click", (event) => {
+		clickCounter++;
+		if (clickCounter <= 1) {
+			deleteCourseBtn.style.color = "#f1c40f";
+			return;
+		} else if (clickCounter === 2) {
+			deleteCourseBtn.style.color = "#e67e22";
+			return;
+		} else if (clickCounter === 3) {
+			deleteCourseBtn.style.color = "#e74c3c";
+			return;
+		}
+		clickCounter = 0;
+		deleteCourseBtn.style.color = "#000";
 
-    // close menu
-    const newContainer = document.createElement("div");
-    newContainer.id = "studentsList";
-    studentsListNode.remove();
-    activeCourseContainer.appendChild(newContainer);
+		// close menu
+		const newContainer = document.createElement("div");
+		newContainer.id = "studentsList";
+		studentsListNode.remove();
+		activeCourseContainer.appendChild(newContainer);
 
-    coursesContainer.classList.replace("none", "flex");
-    activeCourseContainer.classList.replace("block", "none");
+		coursesContainer.classList.replace("none", "flex");
+		activeCourseContainer.classList.replace("block", "none");
 
-    // delete course and load startpage
-    const jsonData = getJsonData();
-    delete jsonData["courses"][courseName];
-    writeJsonData(jsonData);
-    reloadStartpage(courseName);
-  });
+		// delete course and load startpage
+		const jsonData = getJsonData();
+		delete jsonData["courses"][courseName];
+		writeJsonData(jsonData);
+		reloadStartpage(courseName);
+	});
 
 	const studentsList = data["courses"][courseName]["students"];
 	for (const [key, value] of Object.entries(studentsList)) {
@@ -192,7 +202,11 @@ const createNewCourseNode = (name) => {
 
 	const div = document.createElement("div");
 	div.classList.add("course");
-	div.value = name;
+  div.value = name;
+
+  div.addEventListener("click", (event) => {
+    button.click();
+  });
 
 	button.addEventListener("click", (event) => {
 		openCourseOverlay(name);
@@ -200,7 +214,7 @@ const createNewCourseNode = (name) => {
 
 	button.appendChild(paragraph);
 	div.appendChild(button);
-  coursesContainer.prepend(div);
+	coursesContainer.prepend(div);
 };
 
 //todo === Startpage ===
@@ -226,18 +240,16 @@ loadStartpage();
 
 //todo === reload Startpage ===
 const reloadStartpage = (deletedCourse) => {
-  if (coursesContainer.classList.contains("none")) {
-    coursesContainer.classList.replace("none", "flex");
-    newCourseContainer.classList.replace("block", "none");
-  }
+	if (coursesContainer.classList.contains("none")) {
+		coursesContainer.classList.replace("none", "flex");
+		newCourseContainer.classList.replace("block", "none");
+	}
 
-  for (let course of coursesContainer.children) {
-    if (course.value == deletedCourse) {
-      course.remove();
-    }
-  }
-
-  loadStartpage();
+	for (let course of coursesContainer.children) {
+		if (course.value == deletedCourse) {
+			course.remove();
+		}
+	}
 };
 
 // if user clicks on "create new course"
@@ -245,6 +257,9 @@ const createCourseButton = document.getElementById("createCourseBtn");
 createCourseButton.addEventListener("click", (event) => {
 	coursesContainer.classList.replace("flex", "none");
 	newCourseContainer.classList.replace("none", "block");
+});
+createCourseButton.parentNode.addEventListener("click", (event) => {
+  createCourseButton.click();
 });
 
 //todo === add Student ===
@@ -265,7 +280,7 @@ addStudentBtn.addEventListener("click", (event) => {
 	students.push(name);
 	studentsLowered.push(name.toLowerCase());
 
-	name = sliceStringIfNeeded(name, 14);
+	name = sliceStringIfNeeded(name, 13);
 
 	const span = document.createElement("span");
 	span.classList.add("studentName");
@@ -295,7 +310,7 @@ addStudentBtn.addEventListener("click", (event) => {
 });
 
 studentNameInputField.addEventListener("keypress", (event) => {
-  studentNameInputField.classList.add("lightBaseBorder");
+	studentNameInputField.classList.add("lightBaseBorder");
 	if (event.key === "Enter") {
 		addStudentBtn.click();
 	}
@@ -308,62 +323,65 @@ cancelBtn.addEventListener("click", (event) => {
 	if (clickCount1 >= 2) {
 		clickCount1 = 0;
 
-    cancelBtn.style.borderColor = baseBorderColor;
-    cancelBtn.classList.replace("warningBorder", "baseBorder");
+		cancelBtn.style.borderColor = baseBorderColor;
+		cancelBtn.classList.replace("warningBorder", "baseBorder");
 		coursesContainer.classList.replace("none", "flex");
 		newCourseContainer.classList.replace("block", "none");
 
-		students = [];
-		for (let node of studentsContainer.children) {
-			node.remove();
-    }
+		// delete all students (the container -> students)
+		const newStudentsContainer = document.createElement("div");
+		newStudentsContainer.id = "studentsContainer";
+		studentsContainer.parentNode.insertBefore(newStudentsContainer, studentsContainer.nextSibling);
+		studentsContainer.remove();
+		studentsContainer = newStudentsContainer;
 
-    courseNameInputField.value = "";
+		courseNameInputField.value = "";
+		resetStudentsList();
 	} else {
-    cancelBtn.classList.replace("baseBorder", "warningBorder");
+		cancelBtn.classList.replace("baseBorder", "warningBorder");
 	}
 });
 
 //todo === submit course creation ===
 let clickCount2 = 0;
 submitBtn.addEventListener("click", (event) => {
-  let courseName = courseNameInputField.value.trim();
+	let courseName = courseNameInputField.value.trim();
 	const data = getJsonData();
 
-  if (courseName.length <= 0) {
-    submitBtn.classList.replace("baseBorder", "warningBorder");
-    return;
-  }
+	if (courseName.length <= 0) {
+		submitBtn.classList.replace("baseBorder", "warningBorder");
+		return;
+	}
 
 	if (data["courses"][courseName]) {
 		createErrorMessage("Ein Kurs mit dem Namen existiert bereits!");
 		courseNameInputField.value = "";
 		courseNameInputField.focus();
 		return;
-  }
+	}
 
-  if (studentsContainer.children.length <= 0) {
-    createErrorMessage("Bitte fügen Sie mindestens einen Schüler hinzu!");
-    studentNameInputField.focus();
-    return;
-  }
+	if (studentsContainer.children.length <= 0) {
+		createErrorMessage("Bitte fügen Sie mindestens einen Schüler hinzu!");
+		studentNameInputField.focus();
+		return;
+	}
 
 	clickCount2++;
 	if (clickCount2 < 2) {
-    submitBtn.classList.replace("baseBorder", "warningBorder");
+		submitBtn.classList.replace("baseBorder", "warningBorder");
 		return;
-  }
-  clickCount2 = 0;
+	}
+	clickCount2 = 0;
 
 	coursesContainer.classList.replace("none", "flex");
 	newCourseContainer.classList.replace("block", "none");
 
-  // delete all students (the container -> students)
-  const newStudentsContainer = document.createElement("div");
-  newStudentsContainer.id = "studentsContainer";
-  studentsContainer.parentNode.insertBefore(newStudentsContainer, studentsContainer.nextSibling);
-  studentsContainer.remove();
-  studentsContainer = newStudentsContainer;
+	// delete all students (the container -> students)
+	const newStudentsContainer = document.createElement("div");
+	newStudentsContainer.id = "studentsContainer";
+	studentsContainer.parentNode.insertBefore(newStudentsContainer, studentsContainer.nextSibling);
+	studentsContainer.remove();
+	studentsContainer = newStudentsContainer;
 
 	// save course data in json file
 	const [day, date, month, year, hour, minute, seconds, milliseconds] = getTime();
@@ -388,13 +406,14 @@ submitBtn.addEventListener("click", (event) => {
 	}
 
 	writeJsonData(data);
-  loadStartpage(courseName);
-  courseNameInputField.value = "";
-  submitBtn.classList.replace("warningBorder", "baseBorder");
+	loadStartpage(courseName);
+	courseNameInputField.value = "";
+	submitBtn.classList.replace("warningBorder", "baseBorder");
+	resetStudentsList();
 });
 
 courseNameInputField.addEventListener("keypress", (event) => {
-  courseNameInputField.classList.add("lightBaseBorder");
+	courseNameInputField.classList.add("lightBaseBorder");
 });
 
 // Made by Yasin Aydin
